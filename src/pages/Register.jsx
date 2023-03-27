@@ -26,10 +26,7 @@ function Register() {
 
   React.useEffect(() => {
     if (users.status === 'success') {
-      alert('Akun berhasil ditambahkan.');
       navigate(URL.LOGIN);
-    } else if (users.status === 'fail') {
-      alert(users.message);
     }
   }, [navigate, users]);
 

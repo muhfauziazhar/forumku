@@ -119,6 +119,10 @@ export const threadSlice = createSlice({
       .addCase(asyncPostComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.message = action.payload.message;
+        state.detail = {
+          ...state.detail,
+          comments: [action.payload.data.comment, ...state.detail.comments],
+        };
       })
       .addCase(asyncPostComment.rejected, (state) => {
         state.isLoading = false;
@@ -169,8 +173,11 @@ export const threadSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(asyncUpVoteComment.fulfilled, (state, action) => {
+        const indexComment = state.detail.comments.map((comment) => comment.id).indexOf(action.payload.data.commentId);
+
         state.isLoading = false;
         state.message = action.payload.message;
+        state.detail.comments[indexComment].upVotesBy = [action.payload.data.vote.userId, ...state.detail.comments[indexComment].upVotesBy];
       })
       .addCase(asyncUpVoteComment.rejected, (state) => {
         state.isLoading = false;
@@ -180,8 +187,11 @@ export const threadSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(asyncDownVoteComment.fulfilled, (state, action) => {
+        const indexComment = state.detail.comments.map((comment) => comment.id).indexOf(action.payload.data.commentId);
+
         state.isLoading = false;
         state.message = action.payload.message;
+        state.detail.comments[indexComment].downVotesBy = [action.payload.data.vote.userId, ...state.detail.comments[indexComment].downVotesBy];
       })
       .addCase(asyncDownVoteComment.rejected, (state) => {
         state.isLoading = false;

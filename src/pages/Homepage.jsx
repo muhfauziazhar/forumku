@@ -22,7 +22,13 @@ function Homepage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {threads.isLoading && <Spinner aria-label="Spinner list thread" size="xl" />}
+        {threads.isLoading && (
+        <>
+          <Spinner aria-label="Spinner list thread" size="xl" />
+          <Spinner aria-label="Spinner list thread" size="xl" />
+          <Spinner aria-label="Spinner list thread" size="xl" />
+        </>
+        )}
         {!threads.isLoading && !threads.filtered && threads.data && threads.data.map((thread) => <ThreadCard key={thread.id} data={thread} />)}
         {!threads.isLoading && threads.filtered && threads.filtered.map((thread) => <ThreadCard key={thread.id} data={thread} />)}
       </div>

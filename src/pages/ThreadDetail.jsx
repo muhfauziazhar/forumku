@@ -45,9 +45,7 @@ function ThreadDetail() {
           <Card>
             <div className="flex flex-col md:flex-row justify-between">
               <div className="flex flex-row">
-                <span className=" bg-blue-200 text-blue-800 text-sm font-medium p-2 rounded dark:bg-blue-900 dark:text-blue-300">
-                  {threadDetail.category}
-                </span>
+                <span className=" bg-blue-200 text-blue-800 text-sm font-medium p-2 rounded dark:bg-blue-900 dark:text-blue-300">{threadDetail.category}</span>
                 <h1 className="ml-3 text-2xl font-bold  text-gray-900 dark:text-white">{threadDetail.title}</h1>
               </div>
 
@@ -62,12 +60,7 @@ function ThreadDetail() {
             <div dangerouslySetInnerHTML={{ __html: threadDetail.body }} />
             <div className="flex justify-between">
               <div className=" flex flex-row items-center">
-                <Button
-                  outline={!isVoteByMe}
-                  gradientDuoTone="greenToBlue"
-                  onClick={() => upVoteThreadHandler()}
-                  disabled={isVoteByMe || !user.ownProfile}
-                >
+                <Button outline={!isVoteByMe} gradientDuoTone="greenToBlue" onClick={() => upVoteThreadHandler()} disabled={isVoteByMe || !user.ownProfile}>
                   <svg
                     fill="none"
                     stroke="currentColor"
@@ -116,17 +109,17 @@ function ThreadDetail() {
             <Badge size="lg">{threadDetail.comments.length}</Badge>
           </div>
           {user
-                        && threadDetail.comments
-                        && threadDetail.comments.length > 0
-                        && threadDetail.comments.map((comment) => (
-                          <CommentList
-                            key={`${comment.id}-key`}
-                            user={user.ownProfile}
-                            comment={comment}
-                            upVoteCommentHandler={upVoteCommentHandler}
-                            downVoteCommentHandler={downVoteCommentHandler}
-                          />
-                        ))}
+            && threadDetail.comments
+            && threadDetail.comments.length > 0
+            && threadDetail.comments.map((comment) => (
+              <CommentList
+                key={`${comment.id}-key`}
+                user={user.ownProfile}
+                comment={comment}
+                upVoteCommentHandler={upVoteCommentHandler}
+                downVoteCommentHandler={downVoteCommentHandler}
+              />
+            ))}
         </div>
       ) : (
         <Spinner aria-label="Spinner thread detail" size="xl" />

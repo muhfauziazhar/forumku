@@ -12,10 +12,10 @@ function CommentList({
   return (
     <Card className="max-w-screen-xl mt-3">
       <div className="flex flex-row">
-        <img className="h-8 w-8 rounded-full shadow-lg" src={comment.owner.avatar} alt="Profile" />
+        <img className="h-8 w-8 rounded-full shadow-lg" src={comment && comment.owner && comment.owner.avatar} alt="Profile" />
         <div className="ml-3">
-          <h5 className="text-sm font-medium text-gray-900 dark:text-white">{comment.owner.name}</h5>
-          <h6 className="text-xs text-gray-400 dark:text-white">{showFormattedDate(comment.createdAt)}</h6>
+          <h5 className="text-sm font-medium text-gray-900 dark:text-white">{comment && comment.owner && comment.owner.name}</h5>
+          <h6 className="text-xs text-gray-400 dark:text-white">{showFormattedDate(comment && comment.createdAt)}</h6>
         </div>
       </div>
       <div dangerouslySetInnerHTML={{ __html: comment.content }} />
@@ -80,7 +80,9 @@ CommentList.propTypes = {
   }).isRequired,
   upVoteCommentHandler: PropTypes.func.isRequired,
   downVoteCommentHandler: PropTypes.func.isRequired,
-  user: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
 };
 
 export default CommentList;
