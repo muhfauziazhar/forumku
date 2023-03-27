@@ -4,11 +4,11 @@ import { threadSlice } from './threads/slice';
 import { userSlice } from './users/slice';
 
 const store = configureStore({
-    reducer: {
-        threads: threadSlice.reducer,
-        users: userSlice.reducer,
-        leaderboards: leaderboardSlice.reducer,
-    },
+  reducer: {
+    threads: threadSlice.reducer,
+    users: userSlice.reducer,
+    leaderboards: leaderboardSlice.reducer,
+  },
 });
 
 export default store;
