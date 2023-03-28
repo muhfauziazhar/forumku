@@ -10,37 +10,25 @@ const initialState = {
   status: null,
 };
 
-export const asyncLogin = createAsyncThunk(
-  'users/login',
-  async ({ email, password }) => {
-    const response = await usersAPI.login({ email, password });
-    return response;
-  },
-);
+export const asyncLogin = createAsyncThunk('users/login', async ({ email, password }) => {
+  const response = await usersAPI.login({ email, password });
+  return response;
+});
 
-export const asyncRegister = createAsyncThunk(
-  'users/register',
-  async ({ name, email, password }) => {
-    const response = await usersAPI.register({ name, email, password });
-    return response;
-  },
-);
+export const asyncRegister = createAsyncThunk('users/register', async ({ name, email, password }) => {
+  const response = await usersAPI.register({ name, email, password });
+  return response;
+});
 
-export const asyncGetAllUsers = createAsyncThunk(
-  'users/getAllUsers',
-  async () => {
-    const response = await usersAPI.getAllUsers();
-    return response;
-  },
-);
+export const asyncGetAllUsers = createAsyncThunk('users/getAllUsers', async () => {
+  const response = await usersAPI.getAllUsers();
+  return response;
+});
 
-export const asyncGetOwnProfile = createAsyncThunk(
-  'users/getOwnProfile',
-  async () => {
-    const response = await usersAPI.getOwnProfile();
-    return response;
-  },
-);
+export const asyncGetOwnProfile = createAsyncThunk('users/getOwnProfile', async () => {
+  const response = await usersAPI.getOwnProfile();
+  return response;
+});
 
 export const userSlice = createSlice({
   name: 'users',
@@ -50,6 +38,7 @@ export const userSlice = createSlice({
       state.isLogin = false;
       state.token = null;
       state.status = null;
+      state.messageLogin = null;
     },
   },
   extraReducers: (builder) => {
@@ -62,7 +51,7 @@ export const userSlice = createSlice({
         state.token = action.payload.data.token;
         state.isLogin = true;
         state.status = action.payload.status;
-        state.message = action.payload.message;
+        state.messageLogin = action.payload.message;
       })
       .addCase(asyncLogin.rejected, (state) => {
         state.isLoading = false;
@@ -75,6 +64,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.status = action.payload.status;
         state.message = action.payload.message;
+        state.isAlert = true;
         state.isRegister = true;
       })
       .addCase(asyncRegister.rejected, (state) => {

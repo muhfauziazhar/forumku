@@ -15,6 +15,7 @@
     "flowbite": "^1.6.4",
     "flowbite-react": "^0.4.2",
     "formik": "^2.2.9",
+    "html-react-parser": "^3.0.15",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "prop-types": "^15.8.1",

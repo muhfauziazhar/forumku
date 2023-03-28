@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { Toast } from 'flowbite-react';
 import { URL } from '../constant/Url';
 import { asyncRegister, selectUser } from '../states/users/slice';
 
@@ -8,6 +9,8 @@ function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const users = useSelector(selectUser);
+
+  const [alertMessage, setAlertMessage] = React.useState(null);
 
   const [input, setInput] = React.useState({
     name: '',
@@ -25,15 +28,26 @@ function Register() {
   };
 
   React.useEffect(() => {
-    if (users.status === 'success') {
-      navigate(URL.LOGIN);
+    if (users.isRegister) {
+      setAlertMessage(users.message);
+      setTimeout(() => {
+        navigate(URL.LOGIN);
+      }, 1000);
+    } else {
+      setAlertMessage(users.message);
     }
-  }, [navigate, users]);
+  }, [users]);
 
   return (
     <div className="h-screen w-full flex justify-center items-center">
       <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
         <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">Register To Your Account</div>
+        {alertMessage && (
+          <Toast>
+            <div className="ml-3 text-sm font-normal">{alertMessage}</div>
+            <Toast.Toggle />
+          </Toast>
+        )}
         <div className="mt-8">
           <form onSubmit={handleRegister} autoComplete="off">
             <div className="flex flex-col mb-2">

@@ -4,6 +4,7 @@ import {
 } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import parse from 'html-react-parser';
 import {
   asyncDownVoteComment,
   asyncDownVoteThread,
@@ -57,7 +58,7 @@ function ThreadDetail() {
                 </div>
               </div>
             </div>
-            <div dangerouslySetInnerHTML={{ __html: threadDetail.body }} />
+            <div>{parse(threadDetail.body)}</div>
             <div className="flex justify-between">
               <div className=" flex flex-row items-center">
                 <Button outline={!isVoteByMe} gradientDuoTone="greenToBlue" onClick={() => upVoteThreadHandler()} disabled={isVoteByMe || !user.ownProfile}>

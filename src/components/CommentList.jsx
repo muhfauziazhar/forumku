@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, Card } from 'flowbite-react';
 import PropTypes from 'prop-types';
+import parse from 'html-react-parser';
 import { showFormattedDate } from '../utils/helper';
 
 function CommentList({
@@ -18,7 +19,7 @@ function CommentList({
           <h6 className="text-xs text-gray-400 dark:text-white">{showFormattedDate(comment && comment.createdAt)}</h6>
         </div>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: comment.content }} />
+      <div>{parse(comment.content)}</div>
       <div className="flex justify-between">
         <div className=" flex flex-row items-center">
           <Button
