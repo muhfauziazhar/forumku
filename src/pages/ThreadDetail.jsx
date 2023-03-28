@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Badge, Button, Card, Spinner,
-} from 'flowbite-react';
+import { Badge, Button, Card, Spinner } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
@@ -105,14 +103,12 @@ function ThreadDetail() {
           )}
 
           <div className="flex mt-8">
-            <h1 className="text-xl mr-1">Komentar</h1>
-            {' '}
-            <Badge size="lg">{threadDetail.comments.length}</Badge>
+            <h1 className="text-xl mr-1">Komentar</h1> <Badge size="lg">{threadDetail.comments.length}</Badge>
           </div>
-          {user
-            && threadDetail.comments
-            && threadDetail.comments.length > 0
-            && threadDetail.comments.map((comment) => (
+          {user &&
+            threadDetail.comments &&
+            threadDetail.comments.length > 0 &&
+            threadDetail.comments.map((comment) => (
               <CommentList
                 key={`${comment.id}-key`}
                 user={user.ownProfile}

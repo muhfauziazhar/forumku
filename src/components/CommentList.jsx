@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import parse from 'html-react-parser';
 import { showFormattedDate } from '../utils/helper';
 
-function CommentList({
-  user, comment, upVoteCommentHandler, downVoteCommentHandler,
-}) {
+function CommentList({ user, comment, upVoteCommentHandler, downVoteCommentHandler }) {
   const isVoteByMe = user && comment && comment.upVotesBy && comment.upVotesBy.includes(user.id);
   const isDownVoteByMe = user && comment && comment.downVotesBy && comment.downVotesBy.includes(user.id);
 
@@ -82,8 +80,8 @@ CommentList.propTypes = {
   upVoteCommentHandler: PropTypes.func.isRequired,
   downVoteCommentHandler: PropTypes.func.isRequired,
   user: PropTypes.shape({
-    id: PropTypes.string,
-  }).isRequired,
+    id: PropTypes.string.isRequired,
+  }),
 };
 
 export default CommentList;
