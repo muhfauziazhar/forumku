@@ -50,7 +50,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.token = action.payload.data.token;
         state.isLogin = true;
-        state.status = action.payload.status;
+        state.statusLogin = action.payload.status;
         state.messageLogin = action.payload.message;
       })
       .addCase(asyncLogin.rejected, (state) => {

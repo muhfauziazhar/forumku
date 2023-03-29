@@ -37,7 +37,7 @@ function Navigation() {
         {token ? (
           <>
             <Link to={URL.THREAD_POST}>
-              <Button>
+              <Button data-testid="add-thread">
                 <svg
                   fill="none"
                   stroke="currentColor"
@@ -53,7 +53,7 @@ function Navigation() {
               </Button>
             </Link>
 
-            <Button onClick={handleLogout} className="ml-3">
+            <Button onClick={handleLogout} className="ml-3" data-testid="logout">
               <svg
                 fill="none"
                 stroke="currentColor"

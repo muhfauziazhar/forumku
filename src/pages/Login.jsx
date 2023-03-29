@@ -28,7 +28,7 @@ function Login() {
   };
 
   React.useEffect(() => {
-    if (users.isLogin) {
+    if (users.statusLogin === 'success') {
       setAlertMessage(users.messageLogin);
       setTimeout(() => {
         setToken(users.token);
@@ -44,7 +44,7 @@ function Login() {
       <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
         <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">Login To Your Account</div>
         {alertMessage && (
-          <Toast>
+          <Toast data-testid="toast">
             <div className="ml-3 text-sm font-normal">{alertMessage}</div>
             <Toast.Toggle />
           </Toast>
@@ -62,7 +62,6 @@ function Login() {
                   required
                   onChange={handleChange}
                   name="email"
-                  value={input.email}
                   type="email"
                   id="sign-up-email"
                   className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
@@ -81,7 +80,6 @@ function Login() {
                   required
                   onChange={handleChange}
                   name="password"
-                  value={input.password}
                   type="password"
                   id="sign-up-password"
                   className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
@@ -93,6 +91,7 @@ function Login() {
               <button
                 type="submit"
                 className="py-2 px-4  bg-purple-600 hover:bg-purple-700 focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                data-testid="login"
               >
                 Login
               </button>

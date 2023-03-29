@@ -28,7 +28,7 @@ function Register() {
   };
 
   React.useEffect(() => {
-    if (users.isRegister) {
+    if (users.status === 'success') {
       setAlertMessage(users.message);
       setTimeout(() => {
         navigate(URL.LOGIN);
@@ -43,7 +43,7 @@ function Register() {
       <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
         <div className="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">Register To Your Account</div>
         {alertMessage && (
-          <Toast>
+          <Toast data-testid="toast">
             <div className="ml-3 text-sm font-normal">{alertMessage}</div>
             <Toast.Toggle />
           </Toast>
