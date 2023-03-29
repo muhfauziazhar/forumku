@@ -8,7 +8,16 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "npx eslint ./src --ext .jsx --ext .js",
-    "lint:fix": "npx eslint ./src --ext .jsx --ext .js --fix"
+    "lint:fix": "npx eslint ./src --ext .jsx --ext .js --fix",
+    "test": "jest",
+    "e2e": "cypress run"
+  },
+  "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "testEnvironment": "jsdom"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
@@ -46,6 +55,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "postcss": "^8.4.21",
     "react-test-renderer": "^18.2.0",
     "tailwindcss": "^3.2.7",

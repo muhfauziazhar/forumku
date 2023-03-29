@@ -4,7 +4,7 @@ import threadsAPI from './api';
 const initialState = {
   isLoading: false,
   isError: false,
-  data: [],
+  data: null,
   detail: null,
 };
 
@@ -209,3 +209,5 @@ export const { filterThreadByCategory, removeThreadByCategory } = threadSlice.ac
 export const selectThread = (state) => state.threads;
 export const selectDetailThread = (state) => state.threads.detail;
 export const selectCategoryThread = (state) => state.threads.data.filter((data) => data.category);
+
+export default threadSlice.reducer;
