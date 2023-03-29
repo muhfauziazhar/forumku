@@ -35,7 +35,7 @@ test('Render login page', async () => {
   await user.type(email, 'tesze2@gmail.com');
   await user.type(password, 'tesze2');
 
-  await user.click(screen.getByTestId('login'));
+  await user.click(screen.getByTestId('login-btn'));
 
   await waitFor(() => {
     expect(email.value).toBe('tesze2@gmail.com');
