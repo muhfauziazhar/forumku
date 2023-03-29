@@ -11,7 +11,7 @@
     "lint:fix": "npx eslint ./src --ext .jsx --ext .js --fix",
     "test": "jest",
     "e2e": "cypress run",
-    "ci:test": "jest --watchAll=false && start-server-and-test dev http-get://0.0.0.0:5173 e2e"
+    "ci:test": "jest --watchAll=false && start-server-and-test dev http://localhost:5173 e2e"
   },
   "jest": {
     "testMatch": [
