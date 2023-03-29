@@ -16,29 +16,29 @@ import Login from '../Login';
 const mockedNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockedNavigate,
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockedNavigate,
 }));
 
 test('Render login page', async () => {
-  render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    </Provider>
-  );
-  const user = userEvent.setup();
-  const email = screen.getByTestId('input-email');
-  const password = screen.getByTestId('input-password');
+    render(
+        <Provider store={store}>
+            <MemoryRouter>
+                <Login />
+            </MemoryRouter>
+        </Provider>
+    );
+    const user = userEvent.setup();
+    const email = screen.getByTestId('input-email');
+    const password = screen.getByTestId('input-password');
 
-  await user.type(email, 'tesze2@gmail.com');
-  await user.type(password, 'tesze2');
+    await user.type(email, 'tesze2@gmail.com');
+    await user.type(password, 'tesze2');
 
-  await user.click(screen.getByTestId('login'));
+    await user.click(screen.getByTestId('login-btn'));
 
-  await waitFor(() => {
-    expect(email.value).toBe('tesze2@gmail.com');
-    expect(password.value).toBe('tesze2');
-  });
+    await waitFor(() => {
+        expect(email.value).toBe('tesze2@gmail.com');
+        expect(password.value).toBe('tesze2');
+    });
 });
