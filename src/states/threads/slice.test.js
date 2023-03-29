@@ -1,8 +1,12 @@
-/* eslint-disable linebreak-style */
 import { configureStore } from '@reduxjs/toolkit';
 import store from '../store';
 import threadsAPI from './api';
-import reducer, { asyncGetDetailThread, asyncPostThread, asyncPostComment, filterThreadByCategory, selectThread } from './slice';
+import reducer, {
+  asyncGetDetailThread,
+  asyncPostThread,
+  asyncPostComment,
+  filterThreadByCategory,
+} from './slice';
 
 describe('Thread States', () => {
   afterAll(() => {
@@ -69,8 +73,8 @@ describe('Thread States', () => {
         },
       });
 
-      const { loading } = store.getState().threads;
-      expect(loading).toBeFalsy();
+      const { isLoading } = store.getState().threads;
+      expect(isLoading).toBeFalsy();
     });
 
     test('filterThreadByCategory', () => {
@@ -105,7 +109,7 @@ describe('Thread States', () => {
               totalComments: 0,
             },
           ],
-        })
+        }),
       );
       const { data } = store.getState().threads;
       expect(data).not.toBe(null);
@@ -114,41 +118,40 @@ describe('Thread States', () => {
 
   describe('Thunk test', () => {
     test('Thunk asyncGetDetailThread', async () => {
-      threadsAPI.asyncGetDetailThread = () =>
-        Promise.resolve({
-          status: 'success',
-          message: 'ok',
-          data: {
-            detailThread: {
-              id: 'thread-1',
-              title: 'Thread Pertama',
-              body: 'Ini adalah thread pertama',
-              category: 'General',
-              createdAt: '2021-06-21T07:00:00.000Z',
-              owner: {
-                id: 'users-1',
-                name: 'John Doe',
-                avatar: 'https://generated-image-url.jpg',
-              },
-              upVotesBy: [],
-              downVotesBy: [],
-              comments: [
-                {
-                  id: 'comment-1',
-                  content: 'Ini adalah komentar pertama',
-                  createdAt: '2021-06-21T07:00:00.000Z',
-                  owner: {
-                    id: 'users-1',
-                    name: 'John Doe',
-                    avatar: 'https://generated-image-url.jpg',
-                  },
-                  upVotesBy: [],
-                  downVotesBy: [],
-                },
-              ],
+      threadsAPI.asyncGetDetailThread = () => Promise.resolve({
+        status: 'success',
+        message: 'ok',
+        data: {
+          detailThread: {
+            id: 'thread-1',
+            title: 'Thread Pertama',
+            body: 'Ini adalah thread pertama',
+            category: 'General',
+            createdAt: '2021-06-21T07:00:00.000Z',
+            owner: {
+              id: 'users-1',
+              name: 'John Doe',
+              avatar: 'https://generated-image-url.jpg',
             },
+            upVotesBy: [],
+            downVotesBy: [],
+            comments: [
+              {
+                id: 'comment-1',
+                content: 'Ini adalah komentar pertama',
+                createdAt: '2021-06-21T07:00:00.000Z',
+                owner: {
+                  id: 'users-1',
+                  name: 'John Doe',
+                  avatar: 'https://generated-image-url.jpg',
+                },
+                upVotesBy: [],
+                downVotesBy: [],
+              },
+            ],
           },
-        });
+        },
+      });
       const localStore = configureStore({
         reducer: (state, action) => {
           if (action.type === 'threads/getDetailThread/fulfilled') {
@@ -163,27 +166,26 @@ describe('Thread States', () => {
     });
 
     test('Thunk asyncPostThread', async () => {
-      threadsAPI.asyncPostThread = () =>
-        Promise.resolve({
-          status: 'success',
-          message: 'ok',
-          data: {
-            thread: {
-              id: 'thread-1',
-              title: 'Thread Pertama',
-              body: 'Ini adalah thread pertama',
-              category: 'General',
-              createdAt: '2021-06-21T07:00:00.000Z',
-              ownerId: 'users-1',
-              upVotesBy: [],
-              downVotesBy: [],
-              totalComments: 0,
-            },
+      threadsAPI.asyncPostThread = () => Promise.resolve({
+        status: 'success',
+        message: 'ok',
+        data: {
+          thread: {
+            id: 'thread-1',
+            title: 'Thread Pertama',
+            body: 'Ini adalah thread pertama',
+            category: 'General',
+            createdAt: '2021-06-21T07:00:00.000Z',
+            ownerId: 'users-1',
+            upVotesBy: [],
+            downVotesBy: [],
+            totalComments: 0,
           },
-        });
+        },
+      });
       const localStore = configureStore({
         reducer: (state, action) => {
-          if (action.type === 'threads/postThreadfulfilled') {
+          if (action.type === 'threads/postThread/fulfilled') {
             return action.payload;
           }
           return state;
@@ -195,31 +197,30 @@ describe('Thread States', () => {
           title: 'Thread Pertama',
           body: 'Ini adalah thread pertama',
           category: 'General',
-        })
+        }),
       );
       expect(threadsAPI.asyncPostThread).toBeDefined();
     });
 
     test('Thunk asyncPostComment', async () => {
-      threadsAPI.asyncPostComment = () =>
-        Promise.resolve({
-          status: 'success',
-          message: 'ok',
-          data: {
-            comment: {
-              id: 'comment-1',
-              content: 'Ini adalah komentar pertama',
-              createdAt: '2021-06-21T07:00:00.000Z',
-              upVotesBy: [],
-              downVotesBy: [],
-              owner: {
-                id: 'users-1',
-                name: 'John Doe',
-                email: 'john@example.com',
-              },
+      threadsAPI.asyncPostComment = () => Promise.resolve({
+        status: 'success',
+        message: 'ok',
+        data: {
+          comment: {
+            id: 'comment-1',
+            content: 'Ini adalah komentar pertama',
+            createdAt: '2021-06-21T07:00:00.000Z',
+            upVotesBy: [],
+            downVotesBy: [],
+            owner: {
+              id: 'users-1',
+              name: 'John Doe',
+              email: 'john@example.com',
             },
           },
-        });
+        },
+      });
       const localStore = configureStore({
         reducer: (state, action) => {
           if (action.type === 'threads/postComment/fulfilled') {
@@ -233,7 +234,7 @@ describe('Thread States', () => {
         asyncPostComment({
           threadId: 'comment-1',
           content: 'Ini adalah komentar pertama',
-        })
+        }),
       );
       expect(threadsAPI.asyncPostComment).toBeDefined();
     });

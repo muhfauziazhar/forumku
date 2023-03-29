@@ -7,10 +7,10 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from '../../states/store';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
+import store from '../../states/store';
 import Login from '../Login';
 
 const mockedNavigate = jest.fn();
@@ -26,7 +26,7 @@ test('Render login page', async () => {
       <MemoryRouter>
         <Login />
       </MemoryRouter>
-    </Provider>
+    </Provider>,
   );
   const user = userEvent.setup();
   const email = screen.getByTestId('input-email');

@@ -8,71 +8,103 @@ const initialState = {
   detail: null,
 };
 
-export const asyncGetAllThreads = createAsyncThunk('threads/getAllThreads', async () => {
-  const response = await threadsAPI.getAllThreads();
-  return response;
-});
+export const asyncGetAllThreads = createAsyncThunk(
+  'threads/getAllThreads',
+  async () => {
+    const response = await threadsAPI.getAllThreads();
+    return response;
+  },
+);
 
-export const asyncPostThread = createAsyncThunk('threads/postThread', async ({ title, body, category }) => {
-  const response = await threadsAPI.postThread({ title, body, category });
-  return response;
-});
+export const asyncPostThread = createAsyncThunk(
+  'threads/postThread',
+  async ({ title, body, category }) => {
+    const response = await threadsAPI.postThread({ title, body, category });
+    return response;
+  },
+);
 
-export const asyncGetDetailThread = createAsyncThunk('threads/getDetailThread', async ({ threadId }) => {
-  const response = await threadsAPI.getDetailThread({ threadId });
-  return response;
-});
+export const asyncGetDetailThread = createAsyncThunk(
+  'threads/getDetailThread',
+  async ({ threadId }) => {
+    const response = await threadsAPI.getDetailThread({ threadId });
+    return response;
+  },
+);
 
-export const asyncPostComment = createAsyncThunk('threads/postComment', async ({ threadId, content }) => {
-  const response = await threadsAPI.postComment({ threadId, content });
-  return response.data.comment;
-});
+export const asyncPostComment = createAsyncThunk(
+  'threads/postComment',
+  async ({ threadId, content }) => {
+    const response = await threadsAPI.postComment({ threadId, content });
+    return response.data.comment;
+  },
+);
 
-export const asyncUpVoteThread = createAsyncThunk('threads/upVoteThread', async ({ threadId }) => {
-  const response = await threadsAPI.upVoteThread({ threadId });
-  return response.data.vote;
-});
+export const asyncUpVoteThread = createAsyncThunk(
+  'threads/upVoteThread',
+  async ({ threadId }) => {
+    const response = await threadsAPI.upVoteThread({ threadId });
+    return response.data.vote;
+  },
+);
 
-export const asyncDownVoteThread = createAsyncThunk('threads/downVoteThread', async ({ threadId }) => {
-  const response = await threadsAPI.downVoteThread({ threadId });
-  return response.data.vote;
-});
+export const asyncDownVoteThread = createAsyncThunk(
+  'threads/downVoteThread',
+  async ({ threadId }) => {
+    const response = await threadsAPI.downVoteThread({ threadId });
+    return response.data.vote;
+  },
+);
 
-export const asyncNeutralVoteThread = createAsyncThunk('threads/neutralVoteThread', async ({ threadId }) => {
-  const response = await threadsAPI.neutralVoteThread({ threadId });
-  return response.data.vote;
-});
+export const asyncNeutralVoteThread = createAsyncThunk(
+  'threads/neutralVoteThread',
+  async ({ threadId }) => {
+    const response = await threadsAPI.neutralVoteThread({ threadId });
+    return response.data.vote;
+  },
+);
 
-export const asyncUpVoteComment = createAsyncThunk('threads/upVoteComment', async ({ threadId, commentId }) => {
-  const response = await threadsAPI.upVoteComment({
-    threadId,
-    commentId,
-  });
-  return response.data.vote;
-});
+export const asyncUpVoteComment = createAsyncThunk(
+  'threads/upVoteComment',
+  async ({ threadId, commentId }) => {
+    const response = await threadsAPI.upVoteComment({
+      threadId,
+      commentId,
+    });
+    return response.data.vote;
+  },
+);
 
-export const asyncDownVoteComment = createAsyncThunk('threads/downVoteComment', async ({ threadId, commentId }) => {
-  const response = await threadsAPI.downVoteComment({
-    threadId,
-    commentId,
-  });
-  return response.data.vote;
-});
+export const asyncDownVoteComment = createAsyncThunk(
+  'threads/downVoteComment',
+  async ({ threadId, commentId }) => {
+    const response = await threadsAPI.downVoteComment({
+      threadId,
+      commentId,
+    });
+    return response.data.vote;
+  },
+);
 
-export const asyncNeutralVoteComment = createAsyncThunk('threads/neutralVoteComment', async ({ threadId, commentId }) => {
-  const response = await threadsAPI.neutralVoteComment({
-    threadId,
-    commentId,
-  });
-  return response.data.vote;
-});
+export const asyncNeutralVoteComment = createAsyncThunk(
+  'threads/neutralVoteComment',
+  async ({ threadId, commentId }) => {
+    const response = await threadsAPI.neutralVoteComment({
+      threadId,
+      commentId,
+    });
+    return response.data.vote;
+  },
+);
 
 export const threadSlice = createSlice({
   name: 'threads',
   initialState,
   reducers: {
     filterThreadByCategory: (state, action) => {
-      state.filtered = state.data.filter((thread) => thread.category === action.payload);
+      state.filtered = state.data.filter(
+        (thread) => thread.category === action.payload,
+      );
     },
     removeThreadByCategory: (state) => {
       state.filtered = undefined;
@@ -156,24 +188,19 @@ export const threadSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
       })
-      .addCase(asyncNeutralVoteThread.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(asyncNeutralVoteThread.fulfilled, (state, action) => {
-        state.isLoading = false;
-      })
-      .addCase(asyncNeutralVoteThread.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      })
       .addCase(asyncUpVoteComment.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(asyncUpVoteComment.fulfilled, (state, action) => {
         state.isLoading = false;
-        const indexComment = state.detail.comments.map((comment) => comment.id).indexOf(action.payload.commentId);
+        const indexComment = state.detail.comments
+          .map((comment) => comment.id)
+          .indexOf(action.payload.commentId);
 
-        state.detail.comments[indexComment].upVotesBy = [action.payload.userId, ...state.detail.comments[indexComment].upVotesBy];
+        state.detail.comments[indexComment].upVotesBy = [
+          action.payload.userId,
+          ...state.detail.comments[indexComment].upVotesBy,
+        ];
       })
       .addCase(asyncUpVoteComment.rejected, (state) => {
         state.isLoading = false;
@@ -184,21 +211,16 @@ export const threadSlice = createSlice({
       })
       .addCase(asyncDownVoteComment.fulfilled, (state, action) => {
         state.isLoading = false;
-        const indexComment = state.detail.comments.map((comment) => comment.id).indexOf(action.payload.commentId);
+        const indexComment = state.detail.comments
+          .map((comment) => comment.id)
+          .indexOf(action.payload.commentId);
 
-        state.detail.comments[indexComment].downVotesBy = [action.payload.userId, ...state.detail.comments[indexComment].downVotesBy];
+        state.detail.comments[indexComment].downVotesBy = [
+          action.payload.userId,
+          ...state.detail.comments[indexComment].downVotesBy,
+        ];
       })
       .addCase(asyncDownVoteComment.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      })
-      .addCase(asyncNeutralVoteComment.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(asyncNeutralVoteComment.fulfilled, (state, action) => {
-        state.isLoading = false;
-      })
-      .addCase(asyncNeutralVoteComment.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
       });

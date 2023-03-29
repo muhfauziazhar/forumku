@@ -4,17 +4,33 @@ import PropTypes from 'prop-types';
 import parse from 'html-react-parser';
 import { showFormattedDate } from '../utils/helper';
 
-function CommentList({ user, comment, upVoteCommentHandler, downVoteCommentHandler }) {
+function CommentList({
+  user,
+  comment,
+  upVoteCommentHandler,
+  downVoteCommentHandler,
+}) {
   const isVoteByMe = user && comment && comment.upVotesBy && comment.upVotesBy.includes(user.id);
-  const isDownVoteByMe = user && comment && comment.downVotesBy && comment.downVotesBy.includes(user.id);
+  const isDownVoteByMe = user
+    && comment
+    && comment.downVotesBy
+    && comment.downVotesBy.includes(user.id);
 
   return (
     <Card className="max-w-screen-xl mt-3">
       <div className="flex flex-row">
-        <img className="h-8 w-8 rounded-full shadow-lg" src={comment && comment.owner && comment.owner.avatar} alt="Profile" />
+        <img
+          className="h-8 w-8 rounded-full shadow-lg"
+          src={comment && comment.owner && comment.owner.avatar}
+          alt="Profile"
+        />
         <div className="ml-3">
-          <h5 className="text-sm font-medium text-gray-900 dark:text-white">{comment && comment.owner && comment.owner.name}</h5>
-          <h6 className="text-xs text-gray-400 dark:text-white">{showFormattedDate(comment && comment.createdAt)}</h6>
+          <h5 className="text-sm font-medium text-gray-900 dark:text-white">
+            {comment && comment.owner && comment.owner.name}
+          </h5>
+          <h6 className="text-xs text-gray-400 dark:text-white">
+            {showFormattedDate(comment && comment.createdAt)}
+          </h6>
         </div>
       </div>
       <div>{parse(comment.content)}</div>
@@ -35,7 +51,11 @@ function CommentList({ user, comment, upVoteCommentHandler, downVoteCommentHandl
               aria-hidden="true"
               className="w-6 h-6 dark:text-white"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75"
+              />
             </svg>
           </Button>
           <Button
@@ -54,7 +74,11 @@ function CommentList({ user, comment, upVoteCommentHandler, downVoteCommentHandl
               aria-hidden="true"
               className="w-6 h-6 dark:text-white"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"
+              />
             </svg>
           </Button>
         </div>
@@ -80,8 +104,8 @@ CommentList.propTypes = {
   upVoteCommentHandler: PropTypes.func.isRequired,
   downVoteCommentHandler: PropTypes.func.isRequired,
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  }),
+    id: PropTypes.string,
+  }).isRequired,
 };
 
 export default CommentList;
