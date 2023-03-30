@@ -13,13 +13,6 @@
     "e2e": "cypress run",
     "ci:test": "jest --watchAll=false && start-server-and-test dev http://localhost:5173 e2e"
   },
-  "jest": {
-    "testMatch": [
-      "**/__tests__/**/*.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[jt]s?(x)"
-    ],
-    "testEnvironment": "jsdom"
-  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
     "flowbite": "^1.6.4",

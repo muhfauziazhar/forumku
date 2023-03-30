@@ -1,132 +1,98 @@
-import { configureStore } from '@reduxjs/toolkit';
-import store from '../store';
+/* eslint no-underscore-dangle: 0 */
 import threadsAPI from './api';
 import reducer, {
+  asyncGetAllThreads,
   asyncGetDetailThread,
-  asyncPostThread,
   asyncPostComment,
-  filterThreadByCategory,
 } from './slice';
+import store from '../store';
 
 describe('Thread States', () => {
+  let api;
+
+  beforeAll(() => {
+    api = threadsAPI;
+  });
+
   afterAll(() => {
     jest.unmock('./api');
   });
 
-  describe('Reducer test', () => {
-    test('Have default value', () => {
-      const state = store.getState().threads;
-      expect(state).toEqual({
+  describe('Thread Reducer Test', () => {
+    const initialState = {
+      isLoading: false,
+      isError: false,
+      data: null,
+      detail: null,
+      filtered: null,
+    };
+
+    it('should return the initial state', () => {
+      expect(reducer(undefined, { type: undefined })).toEqual({
         isLoading: false,
         isError: false,
         data: null,
         detail: null,
+        filtered: null,
       });
     });
 
-    test('getAllThreads, Fulfilled', () => {
-      store.dispatch({
-        type: 'threads/getAllThreads/fulfilled',
+    it('sets isLoading when asyncGetAllThreads is pending', () => {
+      const action = { type: asyncGetAllThreads.pending.type };
+      const { isLoading } = reducer(initialState, action);
+      expect(isLoading).toBeTruthy();
+    });
+
+    it('sets isLoading and data when asyncGetAllThreads is fulfilled', () => {
+      const fakeResponse = [
+        {
+          id: 'thread-1',
+          title: 'Thread Pertama',
+          body: 'Ini adalah thread pertama',
+          category: 'General',
+          createdAt: '2021-06-21T07:00:00.000Z',
+          ownerId: 'users-1',
+          upVotesBy: [],
+          downVotesBy: [],
+          totalComments: 0,
+        },
+      ];
+      const action = {
+        type: asyncGetAllThreads.fulfilled.type,
         payload: {
           data: {
-            threads: [
-              {
-                id: 'thread-1',
-                title: 'Thread Pertama',
-                body: 'Ini adalah thread pertama',
-                category: 'General',
-                createdAt: '2021-06-21T07:00:00.000Z',
-                ownerId: 'users-1',
-                upVotesBy: [],
-                downVotesBy: [],
-                totalComments: 0,
-              },
-            ],
+            threads: fakeResponse,
           },
         },
-      });
-
-      const { data, isLoading } = store.getState().threads;
-      expect(isLoading).toBeFalsy();
-      expect(data).toBeDefined();
-    });
-
-    test('postThread, Fulfilled', () => {
-      store.dispatch({
-        type: 'threads/postThread/fulfilled',
-        payload: {
-          data: {
-            threads: [
-              {
-                id: 'thread-1',
-                title: 'Thread Pertama',
-                body: 'Ini adalah thread pertama',
-                category: 'General',
-                createdAt: '2021-06-21T07:00:00.000Z',
-                ownerId: 'users-1',
-                upVotesBy: [],
-                downVotesBy: [],
-                totalComments: 0,
-              },
-            ],
-          },
-        },
-      });
-
-      const { isLoading } = store.getState().threads;
-      expect(isLoading).toBeFalsy();
-    });
-
-    test('filterThreadByCategory', () => {
-      const prevState = {
-        data: [
-          {
-            id: 'thread-1',
-            title: 'Thread Pertama',
-            body: 'Ini adalah thread pertama',
-            category: 'General',
-            createdAt: '2021-06-21T07:00:00.000Z',
-            ownerId: 'users-1',
-            upVotesBy: [],
-            downVotesBy: [],
-            totalComments: 0,
-          },
-        ],
       };
-      reducer(
-        prevState,
-        filterThreadByCategory({
-          data: [
-            {
-              id: 'thread-1',
-              title: 'Thread Pertama',
-              body: 'Ini adalah thread pertama',
-              category: 'General',
-              createdAt: '2021-06-21T07:00:00.000Z',
-              ownerId: 'users-1',
-              upVotesBy: [],
-              downVotesBy: [],
-              totalComments: 0,
-            },
-          ],
-        }),
-      );
-      const { data } = store.getState().threads;
-      expect(data).not.toBe(null);
+      const state = reducer(initialState, action);
+      expect(state).toEqual({
+        isLoading: false,
+        detail: null,
+        filtered: null,
+        isError: false,
+        data: fakeResponse,
+      });
     });
-  });
 
-  describe('Thunk test', () => {
-    test('Thunk asyncGetDetailThread', async () => {
-      threadsAPI.asyncGetDetailThread = () => Promise.resolve({
-        status: 'success',
-        message: 'ok',
-        data: {
-          detailThread: {
-            id: 'thread-1',
-            title: 'Thread Pertama',
-            body: 'Ini adalah thread pertama',
-            category: 'General',
+    it('sets the detail when asyncGetDetailThread is fulfilled', () => {
+      const fakeResponse = {
+        id: 'thread-1',
+        title: 'Thread Pertama',
+        body: 'Ini adalah thread pertama',
+        category: 'General',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        owner: {
+          id: 'users-1',
+          name: 'John Doe',
+          avatar: 'https://generated-image-url.jpg',
+        },
+        upVotesBy: [],
+        downVotesBy: [],
+        comments: [
+          {
+            id: 'comment-1',
+            content: 'Ini adalah komentar pertama',
             createdAt: '2021-06-21T07:00:00.000Z',
             owner: {
               id: 'users-1',
@@ -135,108 +101,233 @@ describe('Thread States', () => {
             },
             upVotesBy: [],
             downVotesBy: [],
-            comments: [
-              {
-                id: 'comment-1',
-                content: 'Ini adalah komentar pertama',
-                createdAt: '2021-06-21T07:00:00.000Z',
-                owner: {
-                  id: 'users-1',
-                  name: 'John Doe',
-                  avatar: 'https://generated-image-url.jpg',
-                },
-                upVotesBy: [],
-                downVotesBy: [],
-              },
-            ],
+          },
+        ],
+      };
+      const action = {
+        type: asyncGetDetailThread.fulfilled.type,
+        payload: {
+          data: {
+            detailThread: fakeResponse,
           },
         },
+      };
+      const state = reducer(initialState, action);
+      expect(state).toEqual({
+        isLoading: false,
+        isError: false,
+        data: null,
+        detail: fakeResponse,
+        filtered: null,
       });
-      const localStore = configureStore({
-        reducer: (state, action) => {
-          if (action.type === 'threads/getDetailThread/fulfilled') {
-            return action.payload;
-          }
-          return state;
-        },
-      });
-
-      await localStore.dispatch(asyncGetDetailThread('thread-1'));
-      expect(threadsAPI.asyncGetDetailThread).toBeDefined();
     });
 
-    test('Thunk asyncPostThread', async () => {
-      threadsAPI.asyncPostThread = () => Promise.resolve({
-        status: 'success',
-        message: 'ok',
-        data: {
-          thread: {
-            id: 'thread-1',
-            title: 'Thread Pertama',
-            body: 'Ini adalah thread pertama',
-            category: 'General',
-            createdAt: '2021-06-21T07:00:00.000Z',
-            ownerId: 'users-1',
-            upVotesBy: [],
-            downVotesBy: [],
-            totalComments: 0,
-          },
+    it('sets the detail when asyncPostComment is fulfilled', () => {
+      const fakeResponse = {
+        id: 'thread-1',
+        title: 'Thread Pertama',
+        body: 'Ini adalah thread pertama',
+        category: 'General',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        owner: {
+          id: 'users-1',
+          name: 'John Doe',
+          avatar: 'https://generated-image-url.jpg',
         },
-      });
-      const localStore = configureStore({
-        reducer: (state, action) => {
-          if (action.type === 'threads/postThread/fulfilled') {
-            return action.payload;
-          }
-          return state;
-        },
-      });
-
-      await localStore.dispatch(
-        asyncPostThread({
-          title: 'Thread Pertama',
-          body: 'Ini adalah thread pertama',
-          category: 'General',
-        }),
-      );
-      expect(threadsAPI.asyncPostThread).toBeDefined();
-    });
-
-    test('Thunk asyncPostComment', async () => {
-      threadsAPI.asyncPostComment = () => Promise.resolve({
-        status: 'success',
-        message: 'ok',
-        data: {
-          comment: {
+        upVotesBy: [],
+        downVotesBy: [],
+        comments: [
+          {
             id: 'comment-1',
             content: 'Ini adalah komentar pertama',
             createdAt: '2021-06-21T07:00:00.000Z',
-            upVotesBy: [],
-            downVotesBy: [],
             owner: {
               id: 'users-1',
               name: 'John Doe',
-              email: 'john@example.com',
+              avatar: 'https://generated-image-url.jpg',
             },
+            upVotesBy: [],
+            downVotesBy: [],
+          },
+        ],
+      };
+      const actionGetDetail = {
+        type: asyncGetDetailThread.fulfilled.type,
+        payload: {
+          data: {
+            detailThread: fakeResponse,
           },
         },
-      });
-      const localStore = configureStore({
-        reducer: (state, action) => {
-          if (action.type === 'threads/postComment/fulfilled') {
-            return action.payload;
-          }
-          return state;
-        },
-      });
+      };
+      const stateGetDetail = reducer(initialState, actionGetDetail);
 
-      await localStore.dispatch(
+      const fakeComment = {
+        id: 'comment-2',
+        content: 'Ini adalah komentar kedua',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        upVotesBy: [],
+        downVotesBy: [],
+        owner: {
+          id: 'users-1',
+          name: 'John Doe',
+          email: 'john@example.com',
+        },
+      };
+
+      const actionPostComment = {
+        type: asyncPostComment.fulfilled.type,
+        payload: {
+          data: { comment: fakeComment },
+        },
+      };
+      const statePostComment = reducer(stateGetDetail, actionPostComment);
+
+      expect(statePostComment).toEqual({
+        isLoading: false,
+        isError: false,
+        data: null,
+        detail: {
+          ...fakeResponse,
+          comments: [fakeComment, ...fakeResponse.comments],
+        },
+        filtered: null,
+      });
+    });
+  });
+
+  describe('Thunk Test', () => {
+    const { dispatch, getState } = store;
+
+    beforeEach(() => {
+      api._getAllThreads = api.getAllThreads;
+      api._getDetailThread = api.getDetailThread;
+      api._postComment = api.postComment;
+    });
+
+    afterEach(() => {
+      api.getAllThreads = api._getAllThread;
+      api.getDetailThread = api._getDetailThread;
+      api.postComment = api._postComment;
+
+      delete api._getAllThreads;
+      delete api._getDetailThreads;
+      delete api._postComment;
+    });
+
+    it('asyncGetAllThreads thunk', async () => {
+      const fakeResponse = [
+        {
+          id: 'thread-1',
+          title: 'Thread Pertama',
+          body: 'Ini adalah thread pertama',
+          category: 'General',
+          createdAt: '2021-06-21T07:00:00.000Z',
+          ownerId: 'users-1',
+          upVotesBy: [],
+          downVotesBy: [],
+          totalComments: 0,
+        },
+      ];
+      api.getAllThreads = () => Promise.resolve({ data: { threads: fakeResponse } });
+
+      await dispatch(asyncGetAllThreads());
+
+      expect(getState().threads.data).toEqual(fakeResponse);
+    });
+
+    it('asyncGetDetailThread thunk', async () => {
+      const fakeResponse = {
+        id: 'thread-1',
+        title: 'Thread Pertama',
+        body: 'Ini adalah thread pertama',
+        category: 'General',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        owner: {
+          id: 'users-1',
+          name: 'John Doe',
+          avatar: 'https://generated-image-url.jpg',
+        },
+        upVotesBy: [],
+        downVotesBy: [],
+        comments: [
+          {
+            id: 'comment-1',
+            content: 'Ini adalah komentar pertama',
+            createdAt: '2021-06-21T07:00:00.000Z',
+            owner: {
+              id: 'users-1',
+              name: 'John Doe',
+              avatar: 'https://generated-image-url.jpg',
+            },
+            upVotesBy: [],
+            downVotesBy: [],
+          },
+        ],
+      };
+
+      api.getDetailThread = () => Promise.resolve({ data: { detailThread: fakeResponse } });
+
+      await dispatch(asyncGetDetailThread({ threadId: fakeResponse.id }));
+
+      expect(getState().threads.detail).toEqual(fakeResponse);
+    });
+
+    it('asyncPostComment thunk', async () => {
+      const fakeResponse = {
+        id: 'thread-1',
+        title: 'Thread Pertama',
+        body: 'Ini adalah thread pertama',
+        category: 'General',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        owner: {
+          id: 'users-1',
+          name: 'John Doe',
+          avatar: 'https://generated-image-url.jpg',
+        },
+        upVotesBy: [],
+        downVotesBy: [],
+        comments: [
+          {
+            id: 'comment-1',
+            content: 'Ini adalah komentar pertama',
+            createdAt: '2021-06-21T07:00:00.000Z',
+            owner: {
+              id: 'users-1',
+              name: 'John Doe',
+              avatar: 'https://generated-image-url.jpg',
+            },
+            upVotesBy: [],
+            downVotesBy: [],
+          },
+        ],
+      };
+
+      const fakeComment = {
+        id: 'comment-2',
+        content: 'Ini adalah komentar kedua',
+        createdAt: '2021-06-21T07:00:00.000Z',
+        upVotesBy: [],
+        downVotesBy: [],
+        owner: {
+          id: 'users-1',
+          name: 'John Doe',
+          email: 'john@example.com',
+        },
+      };
+
+      api.postComment = () => Promise.resolve({ data: { comment: fakeComment } });
+
+      await dispatch(
         asyncPostComment({
-          threadId: 'comment-1',
-          content: 'Ini adalah komentar pertama',
+          threadId: fakeResponse.id,
+          content: fakeComment.content,
         }),
       );
-      expect(threadsAPI.asyncPostComment).toBeDefined();
+
+      expect(getState().threads.detail).toEqual({
+        ...fakeResponse,
+        comments: [fakeComment, ...fakeResponse.comments],
+      });
     });
   });
 });

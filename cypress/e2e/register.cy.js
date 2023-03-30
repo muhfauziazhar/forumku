@@ -12,6 +12,15 @@ describe('Register Scenario', () => {
       .should('be.visible');
   });
 
+  it('Input give an error when blank input', () => {
+    cy.get('button')
+      .contains(/^Register$/)
+      .click();
+    cy.contains('Name is required');
+    cy.contains('Email is required');
+    cy.contains('Password is required');
+  });
+
   it('Register success', () => {
     const random = `${Math.floor(Math.random() * 10000000000000)}`;
 

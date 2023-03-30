@@ -9,6 +9,13 @@ describe('Login Scenario', () => {
     cy.get('[data-testid="login"]').should('be.visible');
   });
 
+  it('Input gives an error when blank input', () => {
+    cy.get('[data-testid="login"]').click();
+
+    cy.contains('Email is required');
+    cy.contains('Password is required');
+  });
+
   it('Login with wrong email/password', () => {
     cy.get('input[type="email"]').type('emailsalah@mail.com');
     cy.get('input[type="password"]').type('passswordsalah');

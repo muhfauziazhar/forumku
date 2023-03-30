@@ -6,6 +6,7 @@ const initialState = {
   isError: false,
   data: null,
   detail: null,
+  filtered: null,
 };
 
 export const asyncGetAllThreads = createAsyncThunk(
@@ -36,7 +37,7 @@ export const asyncPostComment = createAsyncThunk(
   'threads/postComment',
   async ({ threadId, content }) => {
     const response = await threadsAPI.postComment({ threadId, content });
-    return response.data.comment;
+    return response;
   },
 );
 
@@ -150,10 +151,9 @@ export const threadSlice = createSlice({
       })
       .addCase(asyncPostComment.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.message = action.payload.message;
         state.detail = {
           ...state.detail,
-          comments: [action.payload, ...state.detail.comments],
+          comments: [action.payload.data.comment, ...state.detail.comments],
         };
       })
       .addCase(asyncPostComment.rejected, (state) => {

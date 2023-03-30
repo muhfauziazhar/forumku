@@ -10,25 +10,37 @@ const initialState = {
   status: null,
 };
 
-export const asyncLogin = createAsyncThunk('users/login', async ({ email, password }) => {
-  const response = await usersAPI.login({ email, password });
-  return response;
-});
+export const asyncLogin = createAsyncThunk(
+  'users/login',
+  async ({ email, password }) => {
+    const response = await usersAPI.login({ email, password });
+    return response;
+  }
+);
 
-export const asyncRegister = createAsyncThunk('users/register', async ({ name, email, password }) => {
-  const response = await usersAPI.register({ name, email, password });
-  return response;
-});
+export const asyncRegister = createAsyncThunk(
+  'users/register',
+  async ({ name, email, password }) => {
+    const response = await usersAPI.register({ name, email, password });
+    return response;
+  }
+);
 
-export const asyncGetAllUsers = createAsyncThunk('users/getAllUsers', async () => {
-  const response = await usersAPI.getAllUsers();
-  return response;
-});
+export const asyncGetAllUsers = createAsyncThunk(
+  'users/getAllUsers',
+  async () => {
+    const response = await usersAPI.getAllUsers();
+    return response;
+  }
+);
 
-export const asyncGetOwnProfile = createAsyncThunk('users/getOwnProfile', async () => {
-  const response = await usersAPI.getOwnProfile();
-  return response;
-});
+export const asyncGetOwnProfile = createAsyncThunk(
+  'users/getOwnProfile',
+  async () => {
+    const response = await usersAPI.getOwnProfile();
+    return response;
+  }
+);
 
 export const userSlice = createSlice({
   name: 'users',
@@ -37,7 +49,7 @@ export const userSlice = createSlice({
     unSetAuthUser: (state) => {
       state.isLogin = false;
       state.token = null;
-      state.status = null;
+      state.statusLogin = null;
       state.messageLogin = null;
     },
   },
