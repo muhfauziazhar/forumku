@@ -2,6 +2,8 @@ import { Toast } from 'flowbite-react';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { URL } from '../constant/Url';
 import { asyncLogin, selectUser } from '../states/users/slice';
 import { setToken } from '../utils/helper';
@@ -11,21 +13,29 @@ function Login() {
   const navigate = useNavigate();
   const users = useSelector(selectUser);
 
-  const [input, setInput] = React.useState({
+  const [input] = React.useState({
     email: '',
     password: '',
   });
 
   const [alertMessage, setAlertMessage] = React.useState(null);
 
-  const handleChange = (event) => {
-    setInput({ ...input, [event.target.name]: event.target.value });
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    password: Yup.string().required('Password is required'),
+  });
+
+  const handleSubmit = (values) => {
+    dispatch(asyncLogin({ ...values }));
   };
 
-  const handleLogin = (event) => {
-    event.preventDefault();
-    dispatch(asyncLogin({ ...input }));
-  };
+  const formik = useFormik({
+    initialValues: input,
+    validationSchema,
+    onSubmit: (values) => {
+      handleSubmit(values);
+    },
+  });
 
   React.useEffect(() => {
     if (users.statusLogin === 'success') {
@@ -34,7 +44,7 @@ function Login() {
         setToken(users.token);
         navigate(URL.HOMEPAGE);
       }, 1000);
-    } else {
+    } else if (users.statusLogin === 'fail') {
       setAlertMessage(users.messageLogin);
     }
   }, [users]);
@@ -50,7 +60,7 @@ function Login() {
           </Toast>
         )}
         <div className="mt-8">
-          <form onSubmit={handleLogin} autoComplete="off">
+          <form onSubmit={formik.handleSubmit} autoComplete="off">
             <div className="flex flex-col mb-2">
               <div className="flex relative ">
                 <span className="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
@@ -59,16 +69,21 @@ function Login() {
                   </svg>
                 </span>
                 <input
-                  required
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
                   name="email"
                   type="email"
-                  id="sign-up-email"
-                  className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  id="sign-in-email"
+                  className={
+                    formik.errors.email && formik.touched.email
+                      ? 'rounded-r-lg flex-1 appearance-none border border-red-600 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent'
+                      : 'rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+                  }
                   placeholder="Your email"
                   data-testid="input-email"
                 />
               </div>
+              {formik.errors.email && formik.touched.email ? <p className="text-red-500">{formik.errors.email}</p> : null}
             </div>
             <div className="flex flex-col mb-6">
               <div className="flex relative ">
@@ -78,16 +93,21 @@ function Login() {
                   </svg>
                 </span>
                 <input
-                  required
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
                   name="password"
                   type="password"
-                  id="sign-up-password"
-                  className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  id="sign-in-password"
+                  className={
+                    formik.errors.password && formik.touched.password
+                      ? 'rounded-r-lg flex-1 appearance-none border border-red-600 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent'
+                      : 'rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+                  }
                   placeholder="Your password"
                   data-testid="input-password"
                 />
               </div>
+              {formik.errors.password && formik.touched.password ? <p className="text-red-500">{formik.errors.password}</p> : null}
             </div>
             <div className="flex w-full">
               <button

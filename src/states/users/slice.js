@@ -37,7 +37,7 @@ export const userSlice = createSlice({
     unSetAuthUser: (state) => {
       state.isLogin = false;
       state.token = null;
-      state.status = null;
+      state.statusLogin = null;
       state.messageLogin = null;
     },
   },
