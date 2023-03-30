@@ -62,7 +62,7 @@ function Register() {
           </Toast>
         )}
         <div className='mt-8'>
-          <form onSubmit={formik.handleSubmit} autoComplete='off'>
+          <form onSubmit={handleRegister} autoComplete='off'>
             <div className='flex flex-col mb-2'>
               <div className='flex relative '>
                 <span className='rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm'>
@@ -82,23 +82,17 @@ function Register() {
                   </svg>
                 </span>
                 <input
-                  onChange={formik.handleChange}
+                  required
+                  onChange={handleChange}
                   name='name'
-                  value={formik.values.name}
+                  value={input.name}
                   type='text'
                   id='sign-up-name'
-                  className={
-                    formik.errors.name && formik.touched.name
-                      ? 'rounded-r-lg flex-1 appearance-none border border-red-600 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent'
-                      : 'rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
-                  }
+                  className=' rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
                   placeholder='Your name'
                   data-testid='input-name'
                 />
               </div>
-              {formik.errors.name && formik.touched.name ? (
-                <p className='text-red-500'>{formik.errors.name}</p>
-              ) : null}
             </div>
             <div className='flex flex-col mb-2'>
               <div className='flex relative '>
@@ -114,23 +108,17 @@ function Register() {
                   </svg>
                 </span>
                 <input
-                  onChange={formik.handleChange}
+                  required
+                  onChange={handleChange}
                   name='email'
-                  value={formik.values.email}
+                  value={input.email}
                   type='email'
                   id='sign-up-email'
-                  className={
-                    formik.errors.email && formik.touched.email
-                      ? 'rounded-r-lg flex-1 appearance-none border border-red-600 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent'
-                      : 'rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
-                  }
+                  className=' rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
                   placeholder='Your email'
                   data-testid='input-email'
                 />
               </div>
-              {formik.errors.email && formik.touched.email ? (
-                <p className='text-red-500'>{formik.errors.email}</p>
-              ) : null}
             </div>
             <div className='flex flex-col mb-6'>
               <div className='flex relative '>
@@ -146,23 +134,17 @@ function Register() {
                   </svg>
                 </span>
                 <input
-                  onChange={formik.handleChange}
+                  required
+                  onChange={handleChange}
                   name='password'
-                  value={formik.values.password}
+                  value={input.password}
                   type='password'
                   id='sign-up-password'
-                  className={
-                    formik.errors.password && formik.touched.password
-                      ? 'rounded-r-lg flex-1 appearance-none border border-red-600 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent'
-                      : 'rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
-                  }
+                  className=' rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
                   placeholder='Your password'
                   data-testid='input-password'
                 />
               </div>
-              {formik.errors.password && formik.touched.password ? (
-                <p className='text-red-500'>{formik.errors.password}</p>
-              ) : null}
             </div>
             <div className='flex w-full'>
               <button
