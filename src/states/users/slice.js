@@ -15,7 +15,7 @@ export const asyncLogin = createAsyncThunk(
   async ({ email, password }) => {
     const response = await usersAPI.login({ email, password });
     return response;
-  }
+  },
 );
 
 export const asyncRegister = createAsyncThunk(
@@ -23,7 +23,7 @@ export const asyncRegister = createAsyncThunk(
   async ({ name, email, password }) => {
     const response = await usersAPI.register({ name, email, password });
     return response;
-  }
+  },
 );
 
 export const asyncGetAllUsers = createAsyncThunk(
@@ -31,7 +31,7 @@ export const asyncGetAllUsers = createAsyncThunk(
   async () => {
     const response = await usersAPI.getAllUsers();
     return response;
-  }
+  },
 );
 
 export const asyncGetOwnProfile = createAsyncThunk(
@@ -39,7 +39,7 @@ export const asyncGetOwnProfile = createAsyncThunk(
   async () => {
     const response = await usersAPI.getOwnProfile();
     return response;
-  }
+  },
 );
 
 export const userSlice = createSlice({
